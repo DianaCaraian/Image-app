@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
-import { useMediaQuery, Grid } from "@mui/material";
+import { useMediaQuery } from "@mui/material";
 import InfiniteScrollList from "./components/InfiniteScroll.tsx";
 import { getRandomImages } from "./data/imagesApi.ts";
 import { CAMPAIGN_REPORT_CONSTS } from "./consts";
-
-const uniqueId = Math.random();
 
 function App() {
   const isLargeScreen = useMediaQuery("(min-width:500px)");
@@ -29,19 +27,12 @@ function App() {
   }, [images]);
 
   return (
-    <>
-      <Grid container spacing={2}>
-        <Grid item>
-          <InfiniteScrollList
-            fetchMoreData={fetchMoreData}
-            hasMore={!endOfList}
-            items={images}
-            uniqueId={uniqueId}
-            isLargeScreen={isLargeScreen}
-          />
-        </Grid>
-      </Grid>
-    </>
+    <InfiniteScrollList
+      fetchMoreData={fetchMoreData}
+      hasMore={!endOfList}
+      items={images}
+      isLargeScreen={isLargeScreen}
+    />
   );
 }
 
