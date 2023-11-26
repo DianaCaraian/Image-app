@@ -1,13 +1,21 @@
 import { useState, useEffect, useCallback, FC } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { List, ListItem, ListItemText, CircularProgress } from "@mui/material";
+import {
+  List,
+  ListItem,
+  ListItemText,
+  CircularProgress,
+  Grid,
+} from "@mui/material";
 import Image from "./Image.tsx";
+import ImageSkeleton from "./ImageSkeleton.tsx";
 
 interface IInfiniteScrollListProps {
   items: string[];
   fetchMoreData: () => void;
   hasMore?: boolean;
   uniqueId: number;
+  isLargeScreen: boolean;
 }
 
 const InfiniteScrollList: FC<IInfiniteScrollListProps> = ({
@@ -15,20 +23,20 @@ const InfiniteScrollList: FC<IInfiniteScrollListProps> = ({
   fetchMoreData,
   hasMore = true,
   uniqueId,
+  isLargeScreen = false,
 }) => {
   const divId = `scrollableDiv-${uniqueId}`;
 
   return (
-    <div
-      style={{ height: "1000px", backgroundColor: "pink", overflow: "auto" }}
-      id={divId}
-    >
+    <div style={{ height: "1000px", overflow: "auto" }} id={divId}>
       <InfiniteScroll
         style={{ overflow: "hidden" }}
         dataLength={items.length}
         next={fetchMoreData}
         hasMore={hasMore}
-        loader={<CircularProgress />}
+        loader={
+          <ImageSkeleton width="100%" height={isLargeScreen ? 300 : 150} />
+        }
         endMessage={
           <p style={{ textAlign: "center" }}>
             <b>Yay! You have seen it all</b>
@@ -36,15 +44,23 @@ const InfiniteScrollList: FC<IInfiniteScrollListProps> = ({
         }
         scrollableTarget={divId}
       >
-        <List></List>
-        <List>
-          {items.map((item, index) => (
-            <ListItem key={index}>
-              {/*TODO fa asta generic sau modifica nume componeneta*/}
-              <Image url={item} index={index} />
-            </ListItem>
+        {/*<List></List>*/}
+        {/*<List>*/}
+        {/*  {items.map((item, index) => (*/}
+        {/*    <ListItem key={index}>*/}
+        {/*      /!*TODO fa asta generic sau modifica nume componeneta*!/*/}
+        {/*      <Image url={item} index={index} />*/}
+        {/*    </ListItem>*/}
+        {/*  ))}*/}
+        {/*</List>*/}
+
+        <Grid container spacing={2}>
+          {items.map((image, index) => (
+            <Grid key={index} item xs={isLargeScreen ? 4 : 12}>
+              <Image url={image} index={index} />
+            </Grid>
           ))}
-        </List>
+        </Grid>
       </InfiniteScroll>
     </div>
   );

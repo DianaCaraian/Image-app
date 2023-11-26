@@ -1,23 +1,18 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useMediaQuery, Grid } from "@mui/material";
-import Image from "./components/Image";
 import InfiniteScrollList from "./components/InfiniteScroll.tsx";
 
 const uniqueId1 = Math.random();
-const uniqueId2 = Math.random();
-const uniqueId3 = Math.random();
 
 function App() {
   const [images, setImages] = useState<string[]>([]);
-  const [images2, setImages2] = useState<string[]>([]);
-  const [images3, setImages3] = useState<string[]>([]);
 
   const isLargeScreen = useMediaQuery("(min-width:500px)");
 
   const accessKey = import.meta.env.VITE_ACCESS_KEY;
   const apiUrl = `${import.meta.env.VITE_API_URL}/photos?per_page=3`;
 
-  const getRandomImages = async (): Promise<string[] | undefined> => {
+  const getRandomImages = async (): Promise<string[]> => {
     try {
       const response = await fetch(apiUrl, {
         method: "GET",
@@ -38,73 +33,33 @@ function App() {
       return images;
     } catch (error) {
       console.error("Error:", error);
+      return [];
     }
   };
 
   const fetchMoreData = async () => {
-    const images = (await getRandomImages()) || [];
-    setImages((prevImages) => [...prevImages, ...images]);
-  };
-
-  const fetchMoreData2 = async () => {
-    const images = (await getRandomImages()) || [];
-    setImages2((prevImages) => [...prevImages, ...images]);
-  };
-
-  const fetchMoreData3 = async () => {
-    const images = (await getRandomImages()) || [];
-    setImages3((prevImages) => [...prevImages, ...images]);
+    const images = await getRandomImages();
+    setTimeout(() => {
+      setImages((prevImages) => [...prevImages, ...images]);
+    }, 3000);
   };
 
   useEffect(() => {
     fetchMoreData();
-    fetchMoreData2();
-    fetchMoreData3();
   }, []);
 
   return (
     <>
       <Grid container spacing={2}>
-        <Grid item xs={isLargeScreen ? 4 : 12}>
+        <Grid item>
           <InfiniteScrollList
             fetchMoreData={fetchMoreData}
             hasMore={true}
             items={images}
             uniqueId={uniqueId1}
+            isLargeScreen={isLargeScreen}
           />
         </Grid>
-
-        {isLargeScreen && (
-          <Grid item xs={4}>
-            <InfiniteScrollList
-              fetchMoreData={fetchMoreData2}
-              hasMore={true}
-              items={images2}
-              uniqueId={uniqueId2}
-            />
-          </Grid>
-        )}
-
-        {isLargeScreen && (
-          <Grid item xs={4}>
-            <InfiniteScrollList
-              fetchMoreData={fetchMoreData3}
-              hasMore={true}
-              items={images3}
-              uniqueId={uniqueId3}
-            />
-          </Grid>
-        )}
-
-        {/*{images.map((image, index) => (*/}
-        {/*    <Grid*/}
-        {/*        key={index}*/}
-        {/*        item*/}
-        {/*        xs={isLargeScreen ? 4 : 12}*/}
-        {/*    >*/}
-        {/*       <Image url={image} index={index} />*/}
-        {/*    </Grid>*/}
-        {/*))}*/}
       </Grid>
     </>
   );
