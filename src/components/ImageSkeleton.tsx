@@ -1,16 +1,15 @@
 import { Skeleton } from "@mui/material";
+import { FC } from "react";
 
-interface ImageSkeletonProps {
-  width: string;
+interface IImageSkeletonProps {
   height: number;
 }
 
-const ImageSkeleton = (props: ImageSkeletonProps) => {
-  const { width, height } = props;
+const ImageSkeleton: FC<IImageSkeletonProps> = ({ height }) => {
   return (
     <Skeleton
       variant="rectangular"
-      width={width}
+      width={"100%"}
       height={height}
       style={{ borderRadius: 8 }}
     />

@@ -1,17 +1,17 @@
-interface ImageProps {
-    url: string;
-    index: number;
-}
-const Image = (props: ImageProps) => {
-    const { url, index } = props;
+import { FC } from "react";
 
-    return (
-        <img
-            src={url}
-            alt={`Image ${index + 1}`}
-            style={{ width: '100%', height: 'auto' }}
-        />
-    )
+interface IImageProps {
+  url: string;
+  index: number;
 }
+const Image: FC<IImageProps> = ({ url, index }) => {
+  return (
+    <img
+      src={url}
+      alt={`Image ${index + 1}`}
+      style={{ width: "100%", height: "auto", borderRadius: 8 }}
+    />
+  );
+};
 
-export default Image
+export default Image;

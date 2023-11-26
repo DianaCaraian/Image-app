@@ -1,19 +1,17 @@
 import { Box } from "@mui/material";
 import ImageSkeleton from "./ImageSkeleton.tsx";
+import { FC } from "react";
 
-interface ImageSkeletonProps {
-  width: string;
+interface IImageSkeletonProps {
   height: number;
 }
 
-const ImageListSkeleton = (props: ImageSkeletonProps) => {
-  const { width, height } = props;
-
+const ImageListSkeleton: FC<IImageSkeletonProps> = ({ height }) => {
   return (
-    <Box sx={{ display: "flex", gap: 3 }}>
-      <ImageSkeleton width={width} height={height} />
-      <ImageSkeleton width={width} height={height} />
-      <ImageSkeleton width={width} height={height} />
+    <Box sx={{ display: "flex", gap: 2 }}>
+      <ImageSkeleton height={height} />
+      <ImageSkeleton height={height} />
+      <ImageSkeleton height={height} />
     </Box>
   );
 };
