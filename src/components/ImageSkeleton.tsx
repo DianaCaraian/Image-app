@@ -1,20 +1,20 @@
-import { Grid, Skeleton } from '@mui/material';
+import { Skeleton } from "@mui/material";
 
-const ImageSkeleton = () => {
-    return (
-        <Grid container spacing={2}>
-            {[...Array(3)].map((_, index) => (
-                <Grid key={index} item xs={12} md={4}>
-                    <Skeleton
-                        variant="rectangular"
-                        width="100%"
-                        height={160}
-                        style={{ borderRadius: 8 }}
-                    />
-                </Grid>
-            ))}
-        </Grid>
-    );
+interface ImageSkeletonProps {
+  width: string;
+  height: number;
+}
+
+const ImageSkeleton = (props: ImageSkeletonProps) => {
+  const { width, height } = props;
+  return (
+    <Skeleton
+      variant="rectangular"
+      width={width}
+      height={height}
+      style={{ borderRadius: 8 }}
+    />
+  );
 };
 
 export default ImageSkeleton;

@@ -1,52 +1,107 @@
-import React, {useState, useEffect, useCallback} from 'react';
-import InfiniteScroll from 'react-infinite-scroll-component';
-import {List, ListItem, ListItemText, CircularProgress} from '@mui/material';
+import { useState, useEffect, useCallback, FC } from "react";
+import InfiniteScroll from "react-infinite-scroll-component";
+import { List, ListItem, ListItemText, CircularProgress } from "@mui/material";
+import Image from "./Image.tsx";
 
-const InfiniteScrollList = () => {
-    const [items, setItems] = useState([1, 2, 3]);
-    const [hasMore, setHasMore] = useState(true);
+interface IInfiniteScrollListProps {
+  items: string[];
+  fetchMoreData: () => void;
+  hasMore?: boolean;
+  uniqueId: number;
+}
 
-    const fetchMoreData = useCallback(() => {
+const InfiniteScrollList: FC<IInfiniteScrollListProps> = ({
+  items,
+  fetchMoreData,
+  hasMore = true,
+  uniqueId,
+}) => {
+  const divId = `scrollableDiv-${uniqueId}`;
 
-        if (items.length >= 100) {
-            setHasMore(false);
-            return;
+  return (
+    <div
+      style={{ height: "1000px", backgroundColor: "pink", overflow: "auto" }}
+      id={divId}
+    >
+      <InfiniteScroll
+        style={{ overflow: "hidden" }}
+        dataLength={items.length}
+        next={fetchMoreData}
+        hasMore={hasMore}
+        loader={<CircularProgress />}
+        endMessage={
+          <p style={{ textAlign: "center" }}>
+            <b>Yay! You have seen it all</b>
+          </p>
         }
-
-        // simulate a network request
-        setTimeout(() => {
-            setItems(prevItems => [...prevItems, prevItems.length]);
-        }, 1500);
-    },[setItems]);
-
-    return (
-        <div style={{height:'100px',backgroundColor:'pink', overflow: 'auto'}} id="scrollableDiv">
-            <InfiniteScroll
-                style={{ overflow: 'hidden' }}
-                dataLength={items.length}
-                next={fetchMoreData}
-                hasMore={hasMore}
-                loader={<CircularProgress/>}
-                endMessage={
-                    <p style={{textAlign: 'center'}}>
-                        <b>Yay! You have seen it all</b>
-                    </p>
-                }
-                scrollableTarget="scrollableDiv"
-            >
-                <List>
-
-                </List>
-                <List>
-                    {items.map((_, index) => (
-                        <ListItem key={index}>
-                            <ListItemText primary={`Item ${index + 1}`}/>
-                        </ListItem>
-                    ))}
-                </List>
-            </InfiniteScroll>
-        </div>
-    );
+        scrollableTarget={divId}
+      >
+        <List></List>
+        <List>
+          {items.map((item, index) => (
+            <ListItem key={index}>
+              {/*TODO fa asta generic sau modifica nume componeneta*/}
+              <Image url={item} index={index} />
+            </ListItem>
+          ))}
+        </List>
+      </InfiniteScroll>
+    </div>
+  );
 };
 
 export default InfiniteScrollList;
+
+// import { useState, useCallback } from "react";
+// import InfiniteScroll from "react-infinite-scroll-component";
+// import { List, ListItem, ListItemText } from "@mui/material";
+// import ImageSkeleton from "./ImageSkeleton.tsx";
+//
+// const InfiniteScrollList = () => {
+//   const [items, setItems] = useState([1, 2, 3]);
+//   const [hasMore, setHasMore] = useState(true);
+//
+//   const fetchMoreData = useCallback(() => {
+//     if (items.length >= 100) {
+//       setHasMore(false);
+//       return;
+//     }
+//
+//     // simulate a network request
+//     setTimeout(() => {
+//       setItems((prevItems) => [...prevItems, prevItems.length]);
+//     }, 1500);
+//   }, [setItems]);
+//
+//   return (
+//     <div
+//       style={{ height: "100px", backgroundColor: "pink", overflow: "auto" }}
+//       id="scrollableDiv"
+//     >
+//       <InfiniteScroll
+//         style={{ overflow: "hidden" }}
+//         dataLength={items.length}
+//         next={fetchMoreData}
+//         hasMore={hasMore}
+//         loader={<ImageSkeleton width="100%" height={300} />}
+//         endMessage={
+//           <p style={{ textAlign: "center" }}>
+//             <b>Yay! You have seen it all</b>
+//           </p>
+//         }
+//         scrollableTarget="scrollableDiv"
+//       >
+//         <List></List>
+//         <List>
+//           {items.map((_, index) => (
+//             <ListItem key={index}>
+//               <ListItemText primary={`Item ${index + 1}`} />
+//             </ListItem>
+//           ))}
+//         </List>
+//       </InfiniteScroll>
+//     </div>
+//   );
+// };
+//
+// export default InfiniteScrollList;
