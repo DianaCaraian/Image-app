@@ -1,14 +1,9 @@
-import { useState, useEffect, useCallback, FC } from "react";
+import { FC } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
-import {
-  List,
-  ListItem,
-  ListItemText,
-  CircularProgress,
-  Grid,
-} from "@mui/material";
+import { Grid } from "@mui/material";
 import Image from "./Image.tsx";
 import ImageSkeleton from "./ImageSkeleton.tsx";
+import ImageListSkeleton from "./ImagesListSkeleton.tsx";
 
 interface IInfiniteScrollListProps {
   items: string[];
@@ -27,6 +22,16 @@ const InfiniteScrollList: FC<IInfiniteScrollListProps> = ({
 }) => {
   const divId = `scrollableDiv-${uniqueId}`;
 
+  const skeletonHeight = isLargeScreen ? 300 : 150;
+  const skeletonWidth = "100%";
+
+  const SkeletonComponent = () =>
+    isLargeScreen ? (
+      <ImageListSkeleton width={skeletonWidth} height={skeletonHeight} />
+    ) : (
+      <ImageSkeleton width={skeletonWidth} height={skeletonHeight} />
+    );
+
   return (
     <div style={{ height: "1000px", overflow: "auto" }} id={divId}>
       <InfiniteScroll
@@ -34,9 +39,7 @@ const InfiniteScrollList: FC<IInfiniteScrollListProps> = ({
         dataLength={items.length}
         next={fetchMoreData}
         hasMore={hasMore}
-        loader={
-          <ImageSkeleton width="100%" height={isLargeScreen ? 300 : 150} />
-        }
+        loader={<SkeletonComponent />}
         endMessage={
           <p style={{ textAlign: "center" }}>
             <b>Yay! You have seen it all</b>
@@ -44,16 +47,6 @@ const InfiniteScrollList: FC<IInfiniteScrollListProps> = ({
         }
         scrollableTarget={divId}
       >
-        {/*<List></List>*/}
-        {/*<List>*/}
-        {/*  {items.map((item, index) => (*/}
-        {/*    <ListItem key={index}>*/}
-        {/*      /!*TODO fa asta generic sau modifica nume componeneta*!/*/}
-        {/*      <Image url={item} index={index} />*/}
-        {/*    </ListItem>*/}
-        {/*  ))}*/}
-        {/*</List>*/}
-
         <Grid container spacing={2}>
           {items.map((image, index) => (
             <Grid key={index} item xs={isLargeScreen ? 4 : 12}>
